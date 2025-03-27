@@ -1,18 +1,2 @@
-### REGISTRAR USUARIO
-POST http://localhost:3000/register
-Content-Type: application/json
-
-{
-    "name": "Fernando",
-    "userName": "fernanfloo",
-    "password": "1331"
-}
-
-### LOGIN
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{
-    "userName": "fernanfloo",
-    "password": "1331"
-}
+### Obtener todos los clientes
+GET http://localhost:3000/api/clientes

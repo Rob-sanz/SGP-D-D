@@ -1,11 +1,15 @@
-import express from 'express';
+import express, {json} from 'express';
+import clienteRouter from './routes/clientes_routes.js';
+//import clientes from './local_db/clientes.json' with { type: 'json' };
 
 const app = express();
-app.use(express.json());
+app.use(json());
 
 app.get('/', (req,res) => {
     res.send("Sistema de Gestion de Pedidos");
 })
+
+app.use('/api/clientes', clienteRouter)
 
 const port = process.env.PORT || 3000;
 
