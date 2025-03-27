@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "nombre": "Juan Pérez",
+      "telefono": "98765432",
+      "correo": "juan.perez@example.com",
+      "direccion": "Calle 123, Ciudad A"
+    },
+    {
+      "id": 2,
+      "nombre": "María López",
+      "telefono": "87654321",
+      "correo": "maria.lopez@example.com",
+      "direccion": "Avenida 456, Ciudad B"
+    },
+    {
+      "id": 3,
+      "nombre": "Carlos Méndez",
+      "telefono": "76543210",
+      "correo": "carlos.mendez@example.com",
+      "direccion": "Boulevard 789, Ciudad C"
+    }
+]
+  

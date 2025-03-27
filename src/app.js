@@ -1,13 +1,11 @@
 import express from 'express';
 
 const app = express();
-
 app.use(express.json());
 
 app.get('/', (req,res) => {
-    res.json({success: true, message: 'Hola desde Express! :)'});
+    res.send("Sistema de Gestion de Pedidos");
 })
-
 
 const port = process.env.PORT || 3000;
 
