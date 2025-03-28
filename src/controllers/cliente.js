@@ -6,8 +6,7 @@ export const getAllClientes = async (req,res) => {
         res.json(result.rows);
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error en la consulta de Clientes');
     }
-
-}
+};
