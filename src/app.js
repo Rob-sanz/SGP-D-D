@@ -1,5 +1,5 @@
 import express, {json} from 'express';
-import clienteRouter from './routes/clientes_routes.js';
+import clienteRouter from './routes/clienteRouter.js';
 //import clientes from './local_db/clientes.json' with { type: 'json' };
 
 const app = express();
