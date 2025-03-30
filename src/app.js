@@ -1,6 +1,6 @@
 import express, {json} from 'express';
 import clienteRouter from './routes/clienteRouter.js';
-//import clientes from './local_db/clientes.json' with { type: 'json' };
+import authRouter from './routes/authRuter.js';
 
 const app = express();
 app.use(json());
@@ -11,6 +11,7 @@ app.get('/', (req,res) => {
 
 //ENDPOINTS
 app.use('/api/clientes', clienteRouter)
+app.use('/api/auth', authRouter)
 
 const port = process.env.PORT || 3000;
 
