@@ -3,18 +3,18 @@ import bcrypt, { hashSync } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const incribirse = async (req,res) => {
-    const {nombre, correo, contrasena, rol, nombre_usuario} = req.body
+    const {nombre, telefono, contrasenia, nombre_usuario, area} = req.body
 
     try{
 
-        if(!nombre || !nombre_usuario || !contrasena || !rol ){
+        if(!nombre || !nombre_usuario || !contrasenia || !area || !telefono ){
             return res.status(400).json({
                 success: false,
-                data: "nombre, nombre_usuario, contrasena con campos requeridos"
+                data: "Todos los campos son requeridos [nombre, telefono, contrasenia, nombre_usuario, area]"
             })
         }
 
-        if(typeof nombre_usuario !== 'string' || typeof contrasena !== 'string' || typeof rol !== 'string'){
+        if(typeof nombre_usuario !== 'string' || typeof contrasenia !== 'string' || typeof area !== 'string'){
             return res.status(400).send("Credenciales deben ser enviadas como cadenas de texto")
         }
 
@@ -22,16 +22,16 @@ export const incribirse = async (req,res) => {
             return res.status(400).send("Nombre de usuario debe contener entre 3 a 10 caracteres")
         }
 
-        if(contrasena.length < 6 ){
+        if(contrasenia.length < 6 ){
             return res.status(400).send("Contraseña muy corta")
         }
 
-        if(rol !== "Recepcion" && rol !== "Produccion" && rol !== "Administrador"){
-            return res.status(400).send("Rol no valido (Recepcion, Produccion, Administrador)")  
+        if(area <1 || area >3){
+            return res.status(400).send("Rol no valido (1.Produccion, 2.Recepcion)")  
         }
     
         const usuarios = await query(
-            'SELECT * FROM usuarios WHERE nombre_usuario = $1',
+            'SELECT * FROM usuarios WHERE usuario = $1',
             [nombre_usuario]
         )
 
@@ -39,11 +39,11 @@ export const incribirse = async (req,res) => {
             return res.status(400).send("Usuario ya Existe")
         } 
         
-        const hashPassword = await bcrypt.hash(contrasena,10);
+        const hashPassword = await bcrypt.hash(contrasenia,10);
 
         const result = await query (
-            'INSERT INTO usuarios(nombre, correo, contrasena, rol, nombre_usuario) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-            [nombre, correo, hashPassword, rol, nombre_usuario]
+            'SELECT * FROM sp_insertar_usuario($1, $2, $3, $4, $5)',
+            [nombre, telefono, nombre_usuario, hashPassword, area]
         )
 
         const usuario = result.rows[0]
@@ -65,10 +65,10 @@ export const incribirse = async (req,res) => {
 
 
 export const inicioSesion = async (req,res) => {
-    const {nombre_usuario, contrasena} = req.body
+    const {nombre_usuario, contrasenia} = req.body
     try{
 
-        if(!nombre_usuario || !contrasena){
+        if(!nombre_usuario || !contrasenia){
             return res.status(400).json({
                 success: false,
                 data: "Usuario y Contraseña con requeridos"
@@ -90,8 +90,7 @@ export const inicioSesion = async (req,res) => {
 
         const usuario = usuarios[0];
 
-        const isPasswordValid = contrasena === usuario.contrasenia
-        //await bcrypt.compare( contrasena, usuario.contrasena )
+        const isPasswordValid = await bcrypt.compare( contrasenia, usuario.contrasenia )
 
         if(!isPasswordValid){
             return res.status(400).json({
@@ -104,11 +103,11 @@ export const inicioSesion = async (req,res) => {
             {
                 nombre_usuario: usuario.nombre_usuario,
                 id_usuario: usuario.id_usuario,
-                rol : usuario.rol
+                area : usuario.area
             },
             process.env.JWT_SECRET,
             {
-                expiresIn: process.env.JWK_EXPIRE
+                expiresIn: process.env.JWT_REFRESH_EXPIRES
             }
         )
 
