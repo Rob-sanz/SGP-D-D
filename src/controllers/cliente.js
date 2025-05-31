@@ -6,7 +6,12 @@ export const getAllClientes = async (req,res) => {
         const result = await query(
             'SELECT * FROM clientes'
         );
-        res.json(result.rows);
+        res.status(200).json({
+            success: true,
+            data: {message: 'cliente actualizado correctamente',
+                clientes: result.rows    
+            }
+        })
     }
     catch (err) {
         console.error(err);
