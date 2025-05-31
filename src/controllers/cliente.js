@@ -32,7 +32,7 @@ export const getClienteById = async (req,res) => {
         }
 
         const result = await query(
-            `SELECT * FROM clientes WHERE id_cliente = $1`,
+            `SELECT * FROM clientes WHERE clienteid = $1`,
             [id]
         )
 
@@ -42,7 +42,13 @@ export const getClienteById = async (req,res) => {
                 data: "Cliente no encontrado"
             })
         }
-        res.json(result.rows[0]);
+        res.status(200).json({
+                success: true,
+                data: {"message": "Cliente encontrado",
+                    cliente: result.rows[0]
+                }
+            }
+        )
     }
     catch (err){
         console.error(err);
