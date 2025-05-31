@@ -25,4 +25,5 @@ export const isAdmin = (req,res,next) => {
     if(usuario.rol !== "Administrador"){
         return res.status(401).send("NO tienes acceso a este recurso")
     }
+    next();
 }

@@ -76,12 +76,12 @@ export const inicioSesion = async (req,res) => {
         }
 
         const result = await query(
-            'SELECT * FROM usuarios WHERE nombre_usuario = $1',
+            'SELECT * FROM usuarios WHERE usuario = $1',
             [nombre_usuario]
         )
         const usuarios = result.rows;
 
-        if(usuarios.length === 0){
+        if(usuarios.length == 0){
             return res.status(404).json({
                 success: false,
                 data: "Credenciales Incorrectas *usuario"
@@ -90,7 +90,8 @@ export const inicioSesion = async (req,res) => {
 
         const usuario = usuarios[0];
 
-        const isPasswordValid = await bcrypt.compare( contrasena, usuario.contrasena )
+        const isPasswordValid = contrasena === usuario.contrasenia
+        //await bcrypt.compare( contrasena, usuario.contrasena )
 
         if(!isPasswordValid){
             return res.status(400).json({
@@ -99,11 +100,11 @@ export const inicioSesion = async (req,res) => {
             })
         }
 
-        const tocken = jwt.sign(
+        const token = jwt.sign(
             {
                 nombre_usuario: usuario.nombre_usuario,
                 id_usuario: usuario.id_usuario,
-                rol : usuarios.rol
+                rol : usuario.rol
             },
             process.env.JWT_SECRET,
             {
@@ -116,7 +117,7 @@ export const inicioSesion = async (req,res) => {
             data: {
                 message: "Inicio Sesion Exitoso",
                 id_usuario: usuario.id_usuario,
-                tocken: tocken,
+                token: token,
             } 
         })
 
@@ -124,7 +125,7 @@ export const inicioSesion = async (req,res) => {
         console.error(err),
         res.status(500).json({
             success: false,
-            data: "Fallo Inicio de Sesion "
+            data: "Fallo Inicio de Sesion"
         })
     }
 }

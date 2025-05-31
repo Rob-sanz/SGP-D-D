@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "node --watch src/app.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.9",
-    "pg": "^8.14.1"
+    "pg": "^8.14.1",
+    "postgres": "^3.4.5"
   }
 }
